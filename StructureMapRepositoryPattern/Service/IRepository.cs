@@ -6,8 +6,8 @@ namespace StructureMapRepositoryPattern.Service
     {
         List<T> GetAll();
         T GetById(int id);
-        T Insert(IData data);
-        void Delete(IData data);
+        T Insert(T data);
+        void Delete(T data);
         void Update();
     }
 }

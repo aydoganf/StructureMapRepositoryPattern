@@ -45,7 +45,7 @@ namespace StructureMapRepositoryPattern.Repository
             _dataList = jsonReader.ReadAllData<T>();
         }
 
-        public T Insert(IData data)
+        public T Insert(T data)
         {
             var validatorResult = dataValidator.Validate((T)data, dataList);
             if (validatorResult.Count() != 0)
@@ -60,14 +60,14 @@ namespace StructureMapRepositoryPattern.Repository
                 id = dataList.Max(i => i.Id) + 1;
             }
             data.Id = id;
-            _dataList.Add((T)data);
+            _dataList.Add(data);
             jsonReader.WriteFile(_dataList);
-            return (T)data;
+            return data;
         }
 
-        public void Delete(IData data)
+        public void Delete(T data)
         {
-            dataList.Remove((T)data);
+            dataList.Remove(data);
             jsonReader.WriteFile(_dataList);
         }
 
@@ -79,75 +79,22 @@ namespace StructureMapRepositoryPattern.Repository
         public void GetDataFormattedInfo(T obj)
         {
             var props = obj.GetType().GetProperties();
-            Extensions.PrintHeader(props.Select(i => i.Name).ToArray());
-            Extensions.PrintLine();
-            Extensions.PrintRow(props.Select(i => i.GetValue(obj).ToString()).ToArray());
-            Extensions.PrintLine();
+            ConsoleTablePrinter.PrintHeader(props.Select(i => i.Name).ToArray());
+            ConsoleTablePrinter.PrintLine();
+            ConsoleTablePrinter.PrintRow(props.Select(i => i.GetValue(obj).ToString()).ToArray());
+            ConsoleTablePrinter.PrintLine();
         }
 
         public void GetDataFormattedInfo()
         {
             var props = typeof(T).GetProperties();
-            Extensions.PrintHeader(props.Select(i => i.Name).ToArray());
-            Extensions.PrintLine();
+            ConsoleTablePrinter.PrintHeader(props.Select(i => i.Name).ToArray());
+            ConsoleTablePrinter.PrintLine();
 
             foreach (var data in dataList)
             {
-                Extensions.PrintRow(props.Select(i => i.GetValue(data).ToString()).ToArray());
-                Extensions.PrintLine();
-            }
-        }
-    }
-
-    public static class Extensions
-    {
-        public static int tableWidth = 77;
-
-        public static void PrintLine()
-        {
-            Console.WriteLine(new string('-', tableWidth));
-        }
-
-        public static void PrintHeader(params string[] headers)
-        {
-            int width = (tableWidth - headers.Length) / headers.Length;
-            string row = "|";
-
-            foreach (string header in headers)
-            {
-                row += AlignCentre(header, width) + "|";
-            }
-
-            Console.BackgroundColor = ConsoleColor.Green;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(row);
-            Console.ResetColor();
-        }
-
-        public static void PrintRow(params string[] columns)
-        {
-            int width = (tableWidth - columns.Length) / columns.Length;
-            string row = "|";
-
-            foreach (string column in columns)
-            {
-                row += AlignCentre(column, width) + "|";
-            }
-
-            Console.WriteLine(row);
-        }
-
-        static string AlignCentre(string text, int width)
-        {
-            text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
-
-            if (string.IsNullOrEmpty(text))
-            {
-                return new string(' ', width);
-            }
-            else
-            {
-                return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
+                ConsoleTablePrinter.PrintRow(props.Select(i => i.GetValue(data).ToString()).ToArray());
+                ConsoleTablePrinter.PrintLine();
             }
         }
     }
