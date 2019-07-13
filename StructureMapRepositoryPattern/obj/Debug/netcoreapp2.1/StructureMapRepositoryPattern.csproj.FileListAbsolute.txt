@@ -1,0 +1,11 @@
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\bin\Debug\netcoreapp2.1\StructureMapRepositoryPattern.deps.json
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\bin\Debug\netcoreapp2.1\StructureMapRepositoryPattern.runtimeconfig.json
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\bin\Debug\netcoreapp2.1\StructureMapRepositoryPattern.runtimeconfig.dev.json
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\bin\Debug\netcoreapp2.1\StructureMapRepositoryPattern.dll
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.csproj.CoreCompileInputs.cache
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.AssemblyInfoInputs.cache
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.AssemblyInfo.cs
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.csprojAssemblyReference.cache
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\bin\Debug\netcoreapp2.1\StructureMapRepositoryPattern.pdb
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.dll
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.pdb
