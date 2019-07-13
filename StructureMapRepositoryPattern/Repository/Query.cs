@@ -47,7 +47,7 @@ namespace StructureMapRepositoryPattern.Repository
 
         public T Insert(T data)
         {
-            var validatorResult = dataValidator.Validate((T)data, dataList);
+            var validatorResult = dataValidator.Validate(data, dataList);
             if (validatorResult.Count() != 0)
             {
                 throw new DataAlreadyExistException(validatorResult.First());
