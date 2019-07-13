@@ -5,16 +5,16 @@ namespace StructureMapRepositoryPattern.Utility
 {
     public class JsonReader : IJsonReader
     {
-        public string JsonPath { get; private set; }
+        private readonly string jsonPath;
 
         public JsonReader(string jsonPath)
         {
-            JsonPath = jsonPath;
+            this.jsonPath = jsonPath;
         }
 
         private string ReadFile()
         {
-            return System.IO.File.ReadAllText(JsonPath);
+            return System.IO.File.ReadAllText(jsonPath);
         }
 
         public List<T> ReadAllData<T>() where T : IData
@@ -25,7 +25,7 @@ namespace StructureMapRepositoryPattern.Utility
 
         public void WriteFile<T>(List<T> data) where T : IData
         {
-            System.IO.File.WriteAllText(JsonPath, Newtonsoft.Json.JsonConvert.SerializeObject(data));
+            System.IO.File.WriteAllText(jsonPath, Newtonsoft.Json.JsonConvert.SerializeObject(data));
         }
     }
 }
