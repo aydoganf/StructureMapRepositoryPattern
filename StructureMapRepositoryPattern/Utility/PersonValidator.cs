@@ -1,9 +1,7 @@
 ﻿using StructureMapRepositoryPattern.Model;
 using StructureMapRepositoryPattern.Service;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace StructureMapRepositoryPattern.Utility
 {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace StructureMapRepositoryPattern.Service
+﻿namespace StructureMapRepositoryPattern.Service
 {
     public interface IRepository<T> where T : IData
     {

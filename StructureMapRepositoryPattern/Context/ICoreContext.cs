@@ -1,8 +1,4 @@
-﻿using StructureMapRepositoryPattern.Repository;
-using StructureMapRepositoryPattern.Service;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using StructureMapRepositoryPattern.Service;
 
 namespace StructureMapRepositoryPattern.Context
 {
