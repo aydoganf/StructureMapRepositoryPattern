@@ -5,7 +5,10 @@ namespace StructureMapRepositoryPattern.Context
 {
     public class CoreContext : ICoreContext
     {
+        #region IoC
         private readonly IContainer container;
+        #endregion
+
         public CoreContext(IContainer container)
         {
             this.container = container;

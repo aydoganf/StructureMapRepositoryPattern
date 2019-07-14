@@ -8,3 +8,4 @@ C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepository
 C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\bin\Debug\netcoreapp2.1\StructureMapRepositoryPattern.pdb
 C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.dll
 C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.pdb
+C:\Users\faruk\source\repos\StructureMapRepositoryPattern\StructureMapRepositoryPattern\obj\Debug\netcoreapp2.1\StructureMapRepositoryPattern.csprojAssemblyReference.cache

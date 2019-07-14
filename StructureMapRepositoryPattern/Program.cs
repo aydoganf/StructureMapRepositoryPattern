@@ -427,7 +427,7 @@ namespace StructureMapRepositoryPattern
 
         public static void ShowCarCommand(ref string carCommand)
         {
-            Console.WriteLine("Here is all commands you could use:");
+            Console.WriteLine("Here is all commands you could use: (Want to go main data selection, give anything else)");
             Console.ForegroundColor = ConsoleColor.Yellow;
             carCommands.ForEach(c => Console.WriteLine("> {0}", c));
             carCommand = Console.ReadLine();
@@ -436,7 +436,7 @@ namespace StructureMapRepositoryPattern
 
         public static void ShowPersonCommand(ref string personCommand)
         {
-            Console.WriteLine("Here is all commands you could use:");
+            Console.WriteLine("Here is all commands you could use: (Want to go main data selection, give anything else)");
             Console.ForegroundColor = ConsoleColor.Yellow;
             personCommands.ForEach(c => Console.WriteLine("- {0}", c));
             personCommand = Console.ReadLine();

@@ -7,7 +7,9 @@ namespace StructureMapRepositoryPattern.Manager
 {
     public class PersonManager
     {
+        #region IoC
         private readonly ICoreContext coreContext;
+        #endregion
 
         public PersonManager(ICoreContext coreContext)
         {

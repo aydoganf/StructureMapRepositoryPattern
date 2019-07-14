@@ -7,6 +7,12 @@ namespace StructureMapRepositoryPattern.Repository
 {
     public abstract class Repository<T> : IRepository<T> where T : IData
     {
+
+        #region IoC
+        private readonly IJsonReader jsonReader;
+        private readonly IDataValidator<T> dataValidator;
+        #endregion
+
         private List<T> _dataList;
         protected List<T> dataList
         {
@@ -19,9 +25,6 @@ namespace StructureMapRepositoryPattern.Repository
                 return _dataList;
             }
         }
-
-        private readonly IJsonReader jsonReader;
-        private readonly IDataValidator<T> dataValidator;
 
         public Repository(IJsonReader jsonReader, IDataValidator<T> dataValidator)
         {

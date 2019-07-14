@@ -7,8 +7,9 @@ namespace StructureMapRepositoryPattern.Manager
 {
     public class CarManager
     {
+        #region IoC
         private readonly ICoreContext coreContext;
-
+        #endregion
 
         public CarManager(ICoreContext coreContext)
         {
