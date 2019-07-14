@@ -1,4 +1,5 @@
-﻿using StructureMapRepositoryPattern.Service;
+﻿using StructureMapRepositoryPattern.Repository;
+using StructureMapRepositoryPattern.Service;
 
 namespace StructureMapRepositoryPattern.Model
 {
@@ -24,6 +25,13 @@ namespace StructureMapRepositoryPattern.Model
             BrandName = brandName;
             Price = price;
             return this;
+        }
+    }
+
+    public class Cars : Query<Car>
+    {
+        public Cars(IJsonReader jsonReader, IDataValidator<Car> dataValidator) : base(jsonReader, dataValidator)
+        {
         }
     }
 }

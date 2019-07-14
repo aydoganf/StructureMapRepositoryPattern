@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace StructureMapRepositoryPattern.Utility
 {
     public static class ConsoleTablePrinter
     {
-        public static int tableWidth = 77;
+        private static int tableWidth = 77;
 
         public static void PrintLine()
         {
             Console.WriteLine(new string('-', tableWidth));
         }
 
-        public static void PrintHeader(params string[] headers)
+        private static void PrintHeader(params string[] headers)
         {
             int width = (tableWidth - headers.Length) / headers.Length;
             string row = "|";
@@ -29,7 +31,45 @@ namespace StructureMapRepositoryPattern.Utility
             Console.ResetColor();
         }
 
-        public static void PrintRow(params string[] columns)
+        public static void PrintHeader<T>(PropertyInfo[] propertyInfos = null)
+        {
+            if (propertyInfos == null)
+            {
+                propertyInfos = typeof(T).GetProperties();
+            }
+            PrintHeader(propertyInfos.Select(i => i.Name).ToArray());
+        }
+
+        public static void PrintObject<T>(T obj)
+        {
+            var props = typeof(T).GetProperties();
+            PrintHeader<T>(props);
+            PrintRow(props.Select(i => i.GetValue(obj).ToString()).ToArray());
+            PrintLine();
+        }
+
+        public static void PrintRow<T>(T obj, PropertyInfo[] propertyInfos = null)
+        {
+            if (propertyInfos == null)
+            {
+                propertyInfos = typeof(T).GetProperties();
+            }
+
+            PrintRow(propertyInfos.Select(p => p.GetValue(obj).ToString()).ToArray());
+            PrintLine();
+        }
+
+        public static void PrintAllDataSet<T>(List<T> obj)
+        {
+            var props = typeof(T).GetProperties();
+            PrintHeader<T>(props);
+            foreach (T row in obj)
+            {
+                PrintRow(row, props);
+            }
+        }
+
+        private static void PrintRow(params string[] columns)
         {
             int width = (tableWidth - columns.Length) / columns.Length;
             string row = "|";
@@ -42,7 +82,7 @@ namespace StructureMapRepositoryPattern.Utility
             Console.WriteLine(row);
         }
 
-        static string AlignCentre(string text, int width)
+        private static string AlignCentre(string text, int width)
         {
             text = text.Length > width ? text.Substring(0, width - 3) + "..." : text;
 

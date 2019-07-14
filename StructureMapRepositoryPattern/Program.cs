@@ -1,5 +1,7 @@
 ﻿using StructureMap;
 using StructureMap.Pipeline;
+using StructureMapRepositoryPattern.Context;
+using StructureMapRepositoryPattern.Manager;
 using StructureMapRepositoryPattern.Model;
 using StructureMapRepositoryPattern.Repository;
 using StructureMapRepositoryPattern.Service;
@@ -76,13 +78,23 @@ namespace StructureMapRepositoryPattern
                     s.WithDefaultConventions();
                     s.ConnectImplementationsToTypesClosing(typeof(IRepository<>));
                     s.ConnectImplementationsToTypesClosing(typeof(IDataValidator<>));
-
+                    s.ConnectImplementationsToTypesClosing(typeof(Query<>));
                 });
                 _.Policies.Add<RepositoryPolicy>();
+                _.For<ICoreContext>().Use<CoreContext>();
             });
 
-            var carRepo = contaier.GetInstance<CarRepository>();
-            var personRepo = contaier.GetInstance<PersonRepository>();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("About Program");
+            Console.WriteLine("----------------------------------------------");
+            Console.WriteLine("To stop program, give 'exit' command anywhere.");
+            Console.WriteLine("----------------------------------------------");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
+
+            var carManager = contaier.GetInstance<CarManager>();
+            var personManager = contaier.GetInstance<PersonManager>();
 
             string mainCommand = "go";
             string dataSelector = "";
@@ -93,7 +105,7 @@ namespace StructureMapRepositoryPattern
                 string personCommand = "persons";
 
                 if (dataSelector != "person" && dataSelector != "car")
-                    ShowDataSelectorCommand(ref dataSelector);
+                    ShowDataSelectorCommand(ref dataSelector, ref personCommand, ref carCommand);
 
                 while (dataSelector == "car")
                 {
@@ -103,10 +115,11 @@ namespace StructureMapRepositoryPattern
 
                         if (carCommand == GET_CAR_LIST)
                         {
-                            allCars = carRepo.GetAll();
+                            allCars = carManager.GetAllCarList(); //carRepo.GetAll();
                             Console.WriteLine("there are {0} car(s) in repo.", allCars.Count);
                             Console.WriteLine();
-                            carRepo.GetDataFormattedInfo();
+                            carManager.GetAllCarListInfoTable();
+                            //carRepo.GetDataFormattedInfo();
                             Console.WriteLine();
                             Console.WriteLine();
                         }
@@ -122,12 +135,12 @@ namespace StructureMapRepositoryPattern
                             double carPrice = Convert.ToDouble(Console.ReadLine());
                             Console.ResetColor();
 
-                            var car = contaier.GetInstance<Car>();
-                            car.With(carBrandName, carPrice);
+                            //var car = contaier.GetInstance<Car>();
+                            //car.With(carBrandName, carPrice);
 
                             try
                             {
-                                carRepo.Insert(car);
+                                carManager.CreateCar(carBrandName, carPrice); //carRepo.Insert(car);
                                 Console.BackgroundColor = ConsoleColor.Green;
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.WriteLine("Car added into repo succesfully");
@@ -140,10 +153,10 @@ namespace StructureMapRepositoryPattern
                             }
                             finally { Console.ResetColor(); }
 
-                            allCars = carRepo.GetAll();
+                            allCars = carManager.GetAllCarList(); //carRepo.GetAll();
                             Console.WriteLine("there are {0} car(s) in repo now..", allCars.Count);
                             Console.WriteLine();
-                            carRepo.GetDataFormattedInfo();
+                            carManager.GetAllCarListInfoTable(); //car.GetDataFormattedInfo();
                             Console.WriteLine();
                             Console.WriteLine();
                         }
@@ -155,10 +168,10 @@ namespace StructureMapRepositoryPattern
                             int carId = Convert.ToInt32(Console.ReadLine());
                             Console.ResetColor();
 
-                            var car = carRepo.GetById(carId);
+                            var car = carManager.GetCarById(carId); //carRepo.GetById(carId);
                             if (car != null)
                             {
-                                carRepo.GetDataFormattedInfo(car);
+                                carManager.GetCarInfoTable(car); //carRepo.GetDataFormattedInfo(car);
                             }
                             else
                             {
@@ -176,10 +189,10 @@ namespace StructureMapRepositoryPattern
                             int carId = Convert.ToInt32(Console.ReadLine());
                             Console.ResetColor();
 
-                            var car = carRepo.GetById(carId);
+                            var car = carManager.GetCarById(carId); //carRepo.GetById(carId);
                             if (car != null)
                             {
-                                carRepo.Delete(car);
+                                carManager.DeleteCar(car); //carRepo.Delete(car);
                                 Console.BackgroundColor = ConsoleColor.Cyan;
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.WriteLine("Car is deleted from repo succesfully.");
@@ -201,10 +214,10 @@ namespace StructureMapRepositoryPattern
                             int carId = Convert.ToInt32(Console.ReadLine());
                             Console.ResetColor();
 
-                            var car = carRepo.GetById(carId);
+                            var car = carManager.GetCarById(carId); //carRepo.GetById(carId);
                             if (car != null)
                             {
-                                carRepo.GetDataFormattedInfo(car);
+                                carManager.GetCarInfoTable(car); //carRepo.GetDataFormattedInfo(car);
                                 Console.WriteLine("You are trying to update car.. So, give me the new brand name of the car:");
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 string carBrandName = Console.ReadLine();
@@ -215,7 +228,7 @@ namespace StructureMapRepositoryPattern
                                 Console.ResetColor();
 
                                 car.Save(carBrandName, carPrice);
-                                carRepo.Update();
+                                carManager.UpdateCar(car); //carRepo.Update();
 
                                 Console.BackgroundColor = ConsoleColor.DarkYellow;
                                 Console.ForegroundColor = ConsoleColor.White;
@@ -236,7 +249,7 @@ namespace StructureMapRepositoryPattern
 
                     if (!carCommands.Any(i => i == carCommand))
                     {
-                        ShowDataSelectorCommand(ref dataSelector);
+                        ShowDataSelectorCommand(ref dataSelector, ref personCommand, ref carCommand);
                     }
                 }
 
@@ -248,10 +261,10 @@ namespace StructureMapRepositoryPattern
 
                         if (personCommand == GET_PERSON_LIST)
                         {
-                            allPersons = personRepo.GetAll();
+                            allPersons = personManager.GetAllPersonList(); //personRepo.GetAll();
                             Console.WriteLine("there are {0} person(s) in repo.", allPersons.Count);
                             Console.WriteLine();
-                            personRepo.GetDataFormattedInfo();
+                            personManager.GetAllPersonListInfoTable(); //personRepo.GetDataFormattedInfo();
                             Console.WriteLine();
                             Console.WriteLine();
                         }
@@ -267,12 +280,12 @@ namespace StructureMapRepositoryPattern
                             string personEmail = Console.ReadLine();
                             Console.ResetColor();
 
-                            var person = contaier.GetInstance<Person>();
-                            person.With(personName, personEmail);
+                            //var person = contaier.GetInstance<Person>();
+                            //person.With(personName, personEmail);
 
                             try
                             {
-                                personRepo.Insert(person);
+                                var person = personManager.CreateNewPerson(personName, personEmail); //personRepo.Insert(person);
                                 Console.BackgroundColor = ConsoleColor.Green;
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.WriteLine("Person added into repo succesfully");
@@ -285,10 +298,10 @@ namespace StructureMapRepositoryPattern
                             }
                             finally { Console.ResetColor(); }
 
-                            allPersons = personRepo.GetAll();
+                            allPersons = personManager.GetAllPersonList(); //personRepo.GetAll();
                             Console.WriteLine("there are {0} person(s) in repo now..", allPersons.Count);
                             Console.WriteLine();
-                            personRepo.GetDataFormattedInfo();
+                            personManager.GetAllPersonListInfoTable(); //personRepo.GetDataFormattedInfo();
                             Console.WriteLine();
                             Console.WriteLine();
 
@@ -302,10 +315,10 @@ namespace StructureMapRepositoryPattern
                             int personId = Convert.ToInt32(Console.ReadLine());
                             Console.ResetColor();
 
-                            var person = personRepo.GetById(personId);
+                            var person = personManager.GetPersonById(personId); //personRepo.GetById(personId);
                             if (person != null)
                             {
-                                personRepo.GetDataFormattedInfo(person);
+                                personManager.GetPersonInfoTable(person); //personRepo.GetDataFormattedInfo(person);
                             }
                             else
                             {
@@ -323,10 +336,10 @@ namespace StructureMapRepositoryPattern
                             int personId = Convert.ToInt32(Console.ReadLine());
                             Console.ResetColor();
 
-                            var person = personRepo.GetById(personId);
+                            var person = personManager.GetPersonById(personId); //personRepo.GetById(personId);
                             if (person != null)
                             {
-                                personRepo.Delete(person);
+                                personManager.DeletePerson(person); //personRepo.Delete(person);
                                 Console.BackgroundColor = ConsoleColor.Cyan;
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.WriteLine("Person is deleted from repo succesfully.");
@@ -348,10 +361,10 @@ namespace StructureMapRepositoryPattern
                             int personId = Convert.ToInt32(Console.ReadLine());
                             Console.ResetColor();
 
-                            var person = personRepo.GetById(personId);
+                            var person = personManager.GetPersonById(personId); //personRepo.GetById(personId);
                             if (person != null)
                             {
-                                personRepo.GetDataFormattedInfo(person);
+                                personManager.GetPersonInfoTable(person); //personRepo.GetDataFormattedInfo(person);
                                 Console.WriteLine("You are trying to update person.. So, give me the new name of the person:");
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 string personName = Console.ReadLine();
@@ -362,7 +375,7 @@ namespace StructureMapRepositoryPattern
                                 Console.ResetColor();
 
                                 person.Save(personName, personEmail);
-                                personRepo.Update();
+                                personManager.UpdatePerson(person); //personRepo.Update();
                                 Console.BackgroundColor = ConsoleColor.DarkYellow;
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.WriteLine("Person is updated in repo succesfully.");
@@ -375,7 +388,6 @@ namespace StructureMapRepositoryPattern
                                 Console.WriteLine("Person is not found in repo with the given identifier!");
                                 Console.ResetColor();
                             }
-                            ShowPersonCommand(ref personCommand);
                         }
 
                         ShowPersonCommand(ref personCommand);
@@ -383,12 +395,15 @@ namespace StructureMapRepositoryPattern
 
                     if (!personCommands.Any(i => i == personCommand))
                     {
-                        ShowDataSelectorCommand(ref dataSelector);
+                        ShowDataSelectorCommand(ref dataSelector, ref personCommand, ref carCommand);
                     }
                 }
 
                 if (dataSelector != "person" && dataSelector != "car")
                 {
+                    if (dataSelector == "exit")
+                        break;
+
                     Console.WriteLine("If you want to proceed, give 'go' command:");
                     mainCommand = Console.ReadLine();
                 }
@@ -396,8 +411,14 @@ namespace StructureMapRepositoryPattern
 
         }
 
-        public static void ShowDataSelectorCommand(ref string dataSelector)
+        public static void ShowDataSelectorCommand(ref string dataSelector, ref string personCommand, ref string carCommand)
         {
+            if (personCommand == "exit" || carCommand == "exit")
+            {
+                dataSelector = "exit";
+                return;
+            }
+
             Console.WriteLine("To select data  type, give 'car' or 'person' command:");
             Console.ForegroundColor = ConsoleColor.Yellow;
             dataSelector = Console.ReadLine();
