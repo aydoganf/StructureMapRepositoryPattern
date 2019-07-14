@@ -81,7 +81,6 @@ namespace StructureMapRepositoryPattern
                     s.ConnectImplementationsToTypesClosing(typeof(Query<>));
                 });
                 _.Policies.Add<RepositoryPolicy>();
-                _.For<ICoreContext>().Use<CoreContext>();
             });
 
             Console.ForegroundColor = ConsoleColor.Yellow;
