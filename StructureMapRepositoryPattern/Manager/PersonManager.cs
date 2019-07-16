@@ -19,7 +19,7 @@ namespace StructureMapRepositoryPattern.Manager
         public Person CreateNewPerson(string name, string email)
         {
             var person = coreContext.New<Person>().With(name, email);
-            return coreContext.Query<Persons>().Insert(person);
+            return person; //coreContext.Query<Persons>().Insert(person);
         }
 
         public List<Person> GetAllPersonList()
@@ -34,12 +34,12 @@ namespace StructureMapRepositoryPattern.Manager
 
         public void DeletePerson(Person person)
         {
-            coreContext.Query<Persons>().Delete(person);
+            //coreContext.Query<Persons>().Delete(person);
         }
 
         public void UpdatePerson(Person person)
         {
-            coreContext.Query<Persons>().Update(person);
+            //coreContext.Query<Persons>().Update(person);
         }
 
         public void GetPersonInfoTable(Person person)

@@ -1,12 +1,18 @@
-﻿using StructureMapRepositoryPattern.Repository;
+﻿using StructureMapRepositoryPattern.Context;
+using StructureMapRepositoryPattern.Repository;
 using StructureMapRepositoryPattern.Service;
 
 namespace StructureMapRepositoryPattern.Model
 {
     public class Car : IData
     {
-        public Car()
+        #region IoC
+        private readonly IRepository<Car> repository;
+        #endregion
+
+        public Car(IRepository<Car> repository)
         {
+            this.repository = repository;
         }
 
         public int Id { get; set; }
@@ -17,6 +23,7 @@ namespace StructureMapRepositoryPattern.Model
         {
             BrandName = brandName;
             Price = price;
+            repository.Insert(this);
             return this;
         }
 
@@ -30,7 +37,7 @@ namespace StructureMapRepositoryPattern.Model
 
     public class Cars : Query<Car>
     {
-        public Cars(IJsonReader jsonReader, IDataValidator<Car> dataValidator) : base(jsonReader, dataValidator)
+        public Cars(ICoreContext coreContext) : base(coreContext)
         {
         }
     }

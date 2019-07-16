@@ -1,4 +1,5 @@
-﻿using StructureMapRepositoryPattern.Repository;
+﻿using StructureMapRepositoryPattern.Context;
+using StructureMapRepositoryPattern.Repository;
 using StructureMapRepositoryPattern.Service;
 using System.Collections.Generic;
 
@@ -8,7 +9,6 @@ namespace StructureMapRepositoryPattern.Model
     {
         public Person()
         {
-
         }
 
         public int Id { get; set; }
@@ -32,13 +32,13 @@ namespace StructureMapRepositoryPattern.Model
 
     public class Persons : Query<Person>
     {
-        public Persons(IJsonReader jsonReader, IDataValidator<Person> dataValidator) : base(jsonReader, dataValidator)
+        public Persons(ICoreContext coreContext) : base(coreContext)
         {
         }
 
         public Person GetByEmail(string email)
         {
-            return base.GetSingleBy(p => p.Email == email);
+            return base.GetBy(p => p.Email == email);
         }
 
         public List<Person> GetListByName(string name)

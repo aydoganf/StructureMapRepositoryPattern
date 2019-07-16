@@ -19,7 +19,7 @@ namespace StructureMapRepositoryPattern.Manager
         public Car CreateCar(string brandName, double price)
         {
             var car = coreContext.New<Car>().With(brandName, price);
-            return coreContext.Query<Cars>().Insert(car);
+            return car; //coreContext.Query<Cars>().Insert(car);
         }
         
         public List<Car> GetAllCarList()
@@ -34,12 +34,12 @@ namespace StructureMapRepositoryPattern.Manager
 
         public void DeleteCar(Car car)
         {
-            coreContext.Query<Cars>().Delete(car);
+            //coreContext.Query<Cars>().Delete(car);
         }
 
         public void UpdateCar(Car car)
         {
-            coreContext.Query<Cars>().Update(car);
+            //coreContext.Query<Cars>().Update(car);
         }
 
         public void GetCarInfoTable(Car car)

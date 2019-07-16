@@ -5,9 +5,8 @@ using System.Linq;
 
 namespace StructureMapRepositoryPattern.Repository
 {
-    public abstract class Repository<T> : IRepository<T> where T : IData
+    public class Repository<T> : IRepository<T> where T : IData
     {
-
         #region IoC
         private readonly IJsonReader jsonReader;
         private readonly IDataValidator<T> dataValidator;
@@ -26,9 +25,14 @@ namespace StructureMapRepositoryPattern.Repository
             }
         }
 
-        public Repository(IJsonReader jsonReader, IDataValidator<T> dataValidator)
+        public Repository(IDataValidator<T> dataValidator)
         {
-            this.jsonReader = jsonReader;
+            string appDir = System.AppContext.BaseDirectory;
+            var dataSourceDir = System.IO.Directory.GetParent(appDir).Parent.Parent.Parent;
+            string dataSourceFileName = string.Concat(dataSourceDir.FullName, @"\dataSource\",
+                typeof(T).Name.ToLower(), "s.json");
+
+            this.jsonReader = new JsonReader(dataSourceFileName);
             this.dataValidator = dataValidator;
         }
 

@@ -1,4 +1,6 @@
 ﻿using StructureMap;
+using StructureMap.Graph;
+using StructureMap.Graph.Scanning;
 using StructureMap.Pipeline;
 using StructureMapRepositoryPattern.Context;
 using StructureMapRepositoryPattern.Manager;
@@ -33,6 +35,14 @@ namespace StructureMapRepositoryPattern
                     instance.Dependencies.AddForConstructorParameter(param, jsonReader);
                 }
             }
+        }
+    }
+
+    public class Some : IRegistrationConvention
+    {
+        public void ScanTypes(TypeSet types, Registry registry)
+        {
+
         }
     }
 
@@ -81,7 +91,10 @@ namespace StructureMapRepositoryPattern
                     s.ConnectImplementationsToTypesClosing(typeof(Query<>));
                 });
                 _.Policies.Add<RepositoryPolicy>();
+                _.For(typeof(IRepository<>)).Use(typeof(Repository<>));
             });
+
+            var repo = contaier.GetInstance<IRepository<Car>>();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("About Program");
