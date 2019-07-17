@@ -25,14 +25,13 @@ namespace StructureMapRepositoryPattern.Repository
             }
         }
 
-        public Repository(IDataValidator<T> dataValidator)
+        public Repository(IJsonReader jsonReader, IDataValidator<T> dataValidator)
         {
-            string appDir = System.AppContext.BaseDirectory;
-            var dataSourceDir = System.IO.Directory.GetParent(appDir).Parent.Parent.Parent;
-            string dataSourceFileName = string.Concat(dataSourceDir.FullName, @"\dataSource\",
-                typeof(T).Name.ToLower(), "s.json");
-
-            this.jsonReader = new JsonReader(dataSourceFileName);
+            //string appDir = System.AppContext.BaseDirectory;
+            //var dataSourceDir = System.IO.Directory.GetParent(appDir).Parent.Parent.Parent;
+            //string dataSourceFileName = string.Concat(dataSourceDir.FullName, @"\dataSource\",
+            //    typeof(T).Name.ToLower(), "s.json");
+            this.jsonReader = jsonReader;
             this.dataValidator = dataValidator;
         }
 

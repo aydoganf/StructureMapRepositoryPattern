@@ -24,7 +24,25 @@ namespace StructureMapRepositoryPattern
                 string appDir = System.AppContext.BaseDirectory;
                 var dataSourceDir = System.IO.Directory.GetParent(appDir).Parent.Parent.Parent;
                 string dataSourceFileName = string.Concat(dataSourceDir.FullName, @"\dataSource\",
-                    pluginType.Name.ToLower().Replace("repository", ""), ".json");
+                    pluginType.Name.ToLower(), ".json");
+
+                var param = instance.Constructor
+                    .GetParameters()
+                    .FirstOrDefault(p => p.ParameterType == typeof(IJsonReader));
+                if (param != null)
+                {
+                    var jsonReader = new JsonReader(dataSourceFileName);
+                    instance.Dependencies.AddForConstructorParameter(param, jsonReader);
+                }
+            }
+
+            if (instance.PluggedType.IsGenericType &&
+                instance.PluggedType.GetGenericTypeDefinition() == typeof(Repository<>))
+            {
+                string appDir = System.AppContext.BaseDirectory;
+                var dataSourceDir = System.IO.Directory.GetParent(appDir).Parent.Parent.Parent;
+                string dataSourceFileName = string.Concat(dataSourceDir.FullName, @"\dataSource\",
+                    instance.PluggedType.GetGenericArguments().First().Name.ToLower(), "s.json");
 
                 var param = instance.Constructor
                     .GetParameters()
@@ -94,7 +112,6 @@ namespace StructureMapRepositoryPattern
                 _.For(typeof(IRepository<>)).Use(typeof(Repository<>));
             });
 
-            var repo = contaier.GetInstance<IRepository<Car>>();
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("About Program");

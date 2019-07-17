@@ -26,14 +26,14 @@ namespace StructureMapRepositoryPattern.Repository
             }
         }
 
-        public Query(ICoreContext coreContext)
+        public Query(ICoreContext coreContext, IJsonReader jsonReader)
         {
-            string appDir = System.AppContext.BaseDirectory;
-            var dataSourceDir = System.IO.Directory.GetParent(appDir).Parent.Parent.Parent;
-            string dataSourceFileName = string.Concat(dataSourceDir.FullName, @"\dataSource\",
-                typeof(T).Name.ToLower(), "s.json");
+            //string appDir = System.AppContext.BaseDirectory;
+            //var dataSourceDir = System.IO.Directory.GetParent(appDir).Parent.Parent.Parent;
+            //string dataSourceFileName = string.Concat(dataSourceDir.FullName, @"\dataSource\",
+            //    typeof(T).Name.ToLower(), "s.json");
 
-            this.jsonReader = new JsonReader(dataSourceFileName);
+            this.jsonReader = jsonReader;
         }
 
         private void GetDataFromSource()
@@ -61,5 +61,21 @@ namespace StructureMapRepositoryPattern.Repository
             return dataList.Where(condition).ToList();
         }
 
+        public void Update(T data)
+        {
+            var d = dataList.FirstOrDefault(i => i.Id == data.Id);
+            var props = typeof(T).GetProperties();
+            foreach (var prop in props)
+            {
+                prop.SetValue(d, prop.GetValue(data));
+            }
+            jsonReader.WriteFile(_dataList);
+        }
+
+        public void Delete(T data)
+        {
+            dataList.Remove(GetById(data.Id));
+            jsonReader.WriteFile(_dataList);
+        }
     }
 }

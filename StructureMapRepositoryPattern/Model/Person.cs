@@ -7,8 +7,13 @@ namespace StructureMapRepositoryPattern.Model
 {
     public class Person : IData
     {
-        public Person()
+        #region IoC
+        private readonly IRepository<Person> repository;
+        #endregion
+
+        public Person(IRepository<Person> repository)
         {
+            this.repository = repository;
         }
 
         public int Id { get; set; }
@@ -19,6 +24,7 @@ namespace StructureMapRepositoryPattern.Model
         {
             Name = name;
             Email = email;
+            repository.Insert(this);
             return this;
         }
 
@@ -32,7 +38,7 @@ namespace StructureMapRepositoryPattern.Model
 
     public class Persons : Query<Person>
     {
-        public Persons(ICoreContext coreContext) : base(coreContext)
+        public Persons(ICoreContext coreContext, IJsonReader jsonReader) : base(coreContext, jsonReader)
         {
         }
 

@@ -31,13 +31,14 @@ namespace StructureMapRepositoryPattern.Model
         {
             BrandName = brandName;
             Price = price;
+            //repository.Update(this);
             return this;
         }
     }
 
     public class Cars : Query<Car>
     {
-        public Cars(ICoreContext coreContext) : base(coreContext)
+        public Cars(ICoreContext coreContext, IJsonReader jsonReader) : base(coreContext, jsonReader)
         {
         }
     }
