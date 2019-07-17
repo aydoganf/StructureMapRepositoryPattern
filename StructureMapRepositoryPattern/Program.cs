@@ -56,11 +56,11 @@ namespace StructureMapRepositoryPattern
         }
     }
 
-    public class Some : IRegistrationConvention
+    public class RepositoryRegistry : Registry
     {
-        public void ScanTypes(TypeSet types, Registry registry)
+        public RepositoryRegistry()
         {
-
+            For(typeof(IRepository<>)).Use(typeof(Repository<>));
         }
     }
 
@@ -71,6 +71,7 @@ namespace StructureMapRepositoryPattern
         static readonly string GET_PERSON = "get person";
         static readonly string DELETE_PERSON = "delete person";
         static readonly string UPDATE_PERSON = "update person";
+        static readonly string GET_PERSON_EMAIL = "get person email";
 
         static readonly string GET_CAR_LIST = "cars";
         static readonly string ADD_CAR = "add car";
@@ -84,7 +85,8 @@ namespace StructureMapRepositoryPattern
                 ADD_PERSON,
                 GET_PERSON,
                 DELETE_PERSON,
-                UPDATE_PERSON
+                UPDATE_PERSON,
+                GET_PERSON_EMAIL
             };
 
         static List<string> carCommands = new List<string>()
@@ -109,7 +111,7 @@ namespace StructureMapRepositoryPattern
                     s.ConnectImplementationsToTypesClosing(typeof(Query<>));
                 });
                 _.Policies.Add<RepositoryPolicy>();
-                _.For(typeof(IRepository<>)).Use(typeof(Repository<>));
+                _.AddRegistry<RepositoryRegistry>();
             });
 
 
@@ -164,9 +166,6 @@ namespace StructureMapRepositoryPattern
                             double carPrice = Convert.ToDouble(Console.ReadLine());
                             Console.ResetColor();
 
-                            //var car = contaier.GetInstance<Car>();
-                            //car.With(carBrandName, carPrice);
-
                             try
                             {
                                 carManager.CreateCar(carBrandName, carPrice); //carRepo.Insert(car);
@@ -176,11 +175,8 @@ namespace StructureMapRepositoryPattern
                             }
                             catch (Exception ex)
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine(ex.Message);
+                                ShowErrorMessage(ex.Message);
                             }
-                            finally { Console.ResetColor(); }
 
                             allCars = carManager.GetAllCarList(); //carRepo.GetAll();
                             Console.WriteLine("there are {0} car(s) in repo now..", allCars.Count);
@@ -204,10 +200,7 @@ namespace StructureMapRepositoryPattern
                             }
                             else
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("Car is not found in repo with the given identifier!");
-                                Console.ResetColor();
+                                ShowErrorMessage("Car is not found in repo with the given identifier!");
                             }
                         }
 
@@ -229,10 +222,7 @@ namespace StructureMapRepositoryPattern
                             }
                             else
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("Car is not found in repo with the given identifier!");
-                                Console.ResetColor();
+                                ShowErrorMessage("Car is not found in repo with the given identifier!");
                             }
                         }
 
@@ -266,10 +256,7 @@ namespace StructureMapRepositoryPattern
                             }
                             else
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("Car is not found in repo with the given identifier!");
-                                Console.ResetColor();
+                                ShowErrorMessage("Car is not found in repo with the given identifier!");
                             }
                         }
 
@@ -309,9 +296,6 @@ namespace StructureMapRepositoryPattern
                             string personEmail = Console.ReadLine();
                             Console.ResetColor();
 
-                            //var person = contaier.GetInstance<Person>();
-                            //person.With(personName, personEmail);
-
                             try
                             {
                                 var person = personManager.CreateNewPerson(personName, personEmail); //personRepo.Insert(person);
@@ -321,20 +305,15 @@ namespace StructureMapRepositoryPattern
                             }
                             catch (Exception ex)
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine(ex.Message);
+                                ShowErrorMessage(ex.Message);
                             }
-                            finally { Console.ResetColor(); }
 
-                            allPersons = personManager.GetAllPersonList(); //personRepo.GetAll();
+                            allPersons = personManager.GetAllPersonList();
                             Console.WriteLine("there are {0} person(s) in repo now..", allPersons.Count);
                             Console.WriteLine();
-                            personManager.GetAllPersonListInfoTable(); //personRepo.GetDataFormattedInfo();
+                            personManager.GetAllPersonListInfoTable();
                             Console.WriteLine();
                             Console.WriteLine();
-
-                            //ShowPersonCommand(ref personCommand);
                         }
 
                         if (personCommand == GET_PERSON)
@@ -351,10 +330,7 @@ namespace StructureMapRepositoryPattern
                             }
                             else
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("Person is not found in repo with the given identifier!");
-                                Console.ResetColor();
+                                ShowErrorMessage("Person is not found in repo with the given identifier!");
                             }
                         }
 
@@ -376,10 +352,7 @@ namespace StructureMapRepositoryPattern
                             }
                             else
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("Person is not found in repo with the given identifier!");
-                                Console.ResetColor();
+                                ShowErrorMessage("Person is not found in repo with the given identifier!");
                             }
                         }
 
@@ -412,10 +385,25 @@ namespace StructureMapRepositoryPattern
                             }
                             else
                             {
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine("Person is not found in repo with the given identifier!");
-                                Console.ResetColor();
+                                ShowErrorMessage("Person is not found in repo with the given identifier!");
+                            }
+                        }
+
+                        if (personCommand == GET_PERSON_EMAIL)
+                        {
+                            Console.WriteLine("Give me the email of person:");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            string personEmail = Console.ReadLine();
+                            Console.ResetColor();
+
+                            var person = personManager.GetPersonByEmail(personEmail);
+                            if (person != null)
+                            {
+                                personManager.GetPersonInfoTable(person);
+                            }
+                            else
+                            {
+                                ShowErrorMessage("Person is not found in repo with the given identifier!");
                             }
                         }
 
@@ -469,6 +457,14 @@ namespace StructureMapRepositoryPattern
             Console.ForegroundColor = ConsoleColor.Yellow;
             personCommands.ForEach(c => Console.WriteLine("- {0}", c));
             personCommand = Console.ReadLine();
+            Console.ResetColor();
+        }
+
+        public static void ShowErrorMessage(string message)
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(message);
             Console.ResetColor();
         }
     }

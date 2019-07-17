@@ -51,5 +51,10 @@ namespace StructureMapRepositoryPattern.Manager
             var personList = GetAllPersonList();
             ConsoleTablePrinter.PrintAllDataSet(personList);
         }
+
+        public Person GetPersonByEmail(string email)
+        {
+            return coreContext.Query<Persons>().GetByEmail(email);
+        }
     }
 }
